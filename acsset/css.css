@@ -1,0 +1,173 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.player {
+    position: relative;
+    max-width: 440px;
+    box-shadow: 1px 1px 1px 0 rgba(0, 0, 255, .2);
+    width: 100%;
+    margin: 0 auto;
+}
+
+.dashboard {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    max-width: 440px;
+    z-index: 1;
+    background-color: #fff;
+    box-shadow: 1px 0 1px 1px rgba(0, 0, 255, .2);
+
+}
+
+.dashboard header {
+    text-align: center;
+    padding: 10px 0 20px;
+}
+
+.dashboard header h4 {
+    color: red;
+    font-size: 0.8rem;
+}
+
+.dashboard header h3 {
+    font-size: 1.2rem;
+}
+
+.dashboard_list {
+    margin: 10px;
+}
+
+.cd {
+    width: 200px;
+    margin: 0 auto;
+}
+
+.cd_thumb {
+    padding-top: 100%;
+    background-size: cover;
+    border-radius: 50%;
+}
+
+.control {
+    padding: 10px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.progress {
+    width: 100%;
+}
+
+.rotate {
+    padding: 16px;
+}
+
+.btn {
+    font-size: 1.4rem;
+}
+
+.pre {
+    padding: 16px;
+}
+
+.play {
+    padding: 16px;
+    /* display: none; */
+}
+
+.btn_play,
+.btn_pause {
+    color: red;
+    font-size: 2rem;
+}
+
+.pause {
+    padding: 16px;
+    display: none;
+}
+
+.next {
+    padding: 16px;
+}
+
+.random {
+    padding: 16px;
+}
+
+.active {
+    color: red;
+    display: none;
+}
+
+.playlist {
+    margin-top: 393px;
+    padding: 8px;
+    background-color: rgb(234, 238, 238);
+}
+
+.song {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 16px;
+    background-color: #fff;
+    border-radius: 4px;
+    margin-bottom: 4px;
+}
+
+.song:active{
+    opacity: 0.8;
+}
+
+._active {
+    background-color: rgb(249, 167, 167);
+}
+
+._active .title_song {
+    color: #fff;
+}
+
+.thumb_song {
+    width: 30px;
+}
+
+.thumb_song-img {
+    padding-top: 100%;
+    background-size: cover;
+    border-radius: 50%;
+}
+
+.title_song {
+    flex: 1;
+    margin-left: 20px;
+}
+
+.title_song h3 {
+    font-size: 0.8rem;
+}
+
+.title_song h4 {
+    font-size: .6rem;
+}
+
+.btn-emoted,
+.btn-emot {
+    font-size: 1.2rem;
+}
+
+.btn-emoted {
+    color: red;
+}
+.emot,
+.emoted {
+    padding: 10px;
+}
+.emoted {
+    display: none;
+}

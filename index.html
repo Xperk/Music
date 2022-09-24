@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./acsset/css.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
+        integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+
+<body>
+    <div class="player">
+        <div class="dashboard">
+            <div class="dashboard_list">
+                <header>
+                    <h4>Now Playing:</h4>
+                    <h3>Sing 57th & 9th</h3>
+                </header>
+
+                <div class="cd">
+                    <div class="cd_thumb" style="background-image: url('./acsset/img/cts.jpg');"></div>
+
+                </div>
+
+                <div class="control">
+                    <div class="rotate">
+                        <i class="fa-solid fa-rotate-left btn btn-rotate"></i>
+                    </div>
+                    <div class="pre">
+                        <i class="fa-solid fa-backward-step btn btn-pre"></i>
+                    </div>
+                    <div id="play" class="play">
+                        <i class="fa-solid fa-circle-play btn btn_play"></i>
+                    </div>
+                    <div id="pause" class="pause">
+                        <i class="fa-solid fa-circle-pause btn btn_pause"></i>
+                    </div>
+                    <div class="next">
+                        <i class="fa-solid fa-forward-step btn btn-next"></i>
+                    </div>
+                    <div class="random">
+                        <i class="fa-solid fa-shuffle btn btn-random"></i>
+                    </div>
+                </div>
+                <input type="range" class="progress" id="progress" value="0" min="0" max="100" step="1">
+
+                <audio id="audio" src=""></audio>
+            </div>
+
+        </div>
+
+        <div class="playlist">
+            <div class="song">
+                <div class="thumb_song">
+                    <div class="thumb_song-img" style="background-image: url('./acsset/img/cts.jpg');"></div>
+                </div>
+                <div class="title_song">
+                    <h3>Ten bai hat</h3>
+                    <h4>Ca si</h4>
+                </div>
+                <div class="emot">
+                    <i class="fa-regular fa-heart btn-emot"></i>
+                </div>
+                <div class="emoted">
+                    <i class="fa-solid fa-heart btn-emoted"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        var btn_play = document.querySelector('.play');
+        var btn_pause = document.querySelector('.pause')
+        var btn_pre = document.querySelector('.pre');
+        var btn_next = document.querySelector('.next')
+        var btn_song = document.querySelector('.song');
+        var btn_emoj = document.querySelector('.emot');
+        var btn_emoji = document.querySelector('.emoted');
+
+        btn_play.onclick = function () {
+            btn_play.style.display = 'none';
+            btn_pause.style.display = 'block';
+        }
+        btn_pause.onclick = function () {
+            btn_play.style.display = 'block';
+            btn_pause.style.display = 'none';
+        }
+
+        btn_next.onclick = function () {
+            btn_play.style.display = 'none';
+            btn_pause.style.display = 'block';
+        }
+
+        btn_pre.onclick = function () {
+            btn_play.style.display = 'none';
+            btn_pause.style.display = 'block';
+        }
+
+        btn_song.onclick = function () {
+            btn_play.style.display = 'block';
+            btn_pause.style.display = 'none';
+        }
+
+        btn_emoji.onclick = function () {
+            btn_emoj.style.display = 'block';
+            btn_emoji.style.display = 'none';
+        }
+        btn_emoj.onclick = function () {
+            btn_emoji.style.display = 'block';
+            btn_emoj.style.display = 'none';
+        }
+
+
+        ////// chuc nang
+        // 1.Render songs
+        // 2.Scroll top
+        // 3.Play/pause/seek
+        // 4.CD ratate 
+        // 5.Next/pre
+        // 6.Random 
+        // 7.Next/ Repeat when ended 
+        // 8.Active song 
+        // 9.Scoll active song into view 
+        // 10.Play song when click 
+
+        const $ = document.querySelector.bind(document);
+        const $$ = document.querySelectorAll.bind(document);
+        const heading = $('header h3');
+        const cdThumb = $('.cd_thumb')
+        const audio = $('#audio')
+        const cd = $('.cd');
+        const playBtn = $('.btn_play')
+        const pauseBtn = $('.btn_pause')
+        const progress = $('.progress')
+        const nextBtn = $('.btn-next')
+        const preBtn = $('.btn-pre')
+        const randomBtn = $('.btn-random')
+        const repeatBtn = $('.btn-rotate')
+        const playList = $('.playlist')
+        const player = $('.player')
+
+        const app = {
+            currentIndex: 0,
+            isRandom: false,
+            isRepeat: false,
+            songs: [
+                {
+                    name: 'Đứa nào làm em buồn',
+                    singer: 'Phúc Du ft Hoàng Dũng',
+                    path: './acsset/Music/Dllem.mp3',
+                    image: './acsset/img/dnleb.jpg'
+                },
+                {
+                    name: "Ex's hate me",
+                    singer: 'Bray',
+                    path: './acsset/Music/Ehm.mp3',
+                    image: './acsset/img/ehm.jpg'
+                },
+                {
+                    name: 'Roar',
+                    singer: 'Caity',
+                    path: './acsset/Music/roar.mp3',
+                    image: './acsset/img/rỏa.jpg'
+                },
+                {
+                    name: 'Dancin',
+                    singer: 'Aaron Smith',
+                    path: './acsset/Music/dancin.mp3',
+                    image: './acsset/img/dancin.jpg'
+                },
+                {
+                    name: "I want it that way",
+                    singer: 'Backstreet Boys',
+                    path: './acsset/Music/iwan.mp3',
+                    image: './acsset/img/iwant.jpg'
+                },
+                {
+                    name: 'Uptown Funk',
+                    singer: 'Mark Ronson',
+                    path: './acsset/Music/upto.mp3',
+                    image: './acsset/img/utf.jpg'
+                },
+                {
+                    name: 'Counting Stars',
+                    singer: 'OneRepublic',
+                    path: './acsset/Music/st.mp3',
+                    image: './acsset/img/cts.jpg'
+                },
+                {
+                    name: 'Waiting For Love',
+                    singer: 'Avicii',
+                    path: './acsset/Music/wait.mp3',
+                    image: './acsset/img/wtfl.png'
+                }
+                
+            ],
+            //1.Render songs
+            render: function () {
+                const htmls = this.songs.map((song, index) => {
+                    return `
+                        <div class="song ${index === this.currentIndex ? '_active' : ''}" data-index = "${index}" >
+                            <div class="thumb_song">
+                                    <div class="thumb_song-img" style="background-image: url('${song.image}');"></div>
+                            </div>
+                            <div class="title_song">
+                                <h3>${song.name}</h3>
+                                <h4>${song.singer}</h4>
+                            </div>
+                            <div class="emot">
+                                <i class="fa-regular fa-heart btn-emot"></i>
+                            </div>
+                            <div class="emoted">
+                                <i class="fa-solid fa-heart btn-emoted"></i>
+                            </div>
+                        </div>
+                    `
+                })
+                playList.innerHTML = htmls.join('')
+            },
+            // xu ly thuoc tinh
+            defineProperties: function () {
+                Object.defineProperty(this, 'currentSong', {
+                    get: function () {
+                        return this.songs[this.currentIndex]
+                    }
+                })
+            },
+
+            //xu ly su kien
+            handleEvents: function () {
+                // isPlaying = false;
+                const _this = this
+                // this nay la app
+                // XU LY cd quay va dung
+                const cd_thumbAimate = cdThumb.animate([
+                    { transform: 'rotate(360deg)' }
+                ], {
+                    duration: 10000,//10s
+                    iterations: Infinity
+                })
+                cd_thumbAimate.pause();
+                const cdWidth = cd.offsetWidth
+                // xu ly phong to / thu nho cd
+                document.onscroll = function () {
+                    const scrollTop = window.scrollY + 1 || document.documentElement.scrollTop + 1
+                    const newCdWidth = cdWidth - scrollTop;
+
+                    cd.style.width = newCdWidth > 0 ? newCdWidth + 'px' : 0
+                    cd.style.opacity = newCdWidth / cdWidth
+                };
+
+                // xu ly khi click play
+                playBtn.onclick = function () {
+                    audio.play();
+                    cd_thumbAimate.play();
+                    // khong hoat dong
+                    // player.classList.add('playing')
+                }
+
+
+                // xu ly khi click pause
+                pauseBtn.onclick = function () {
+                    audio.pause();
+                    cd_thumbAimate.pause();
+                }
+
+                // khi tien do bai hat thay doi
+                audio.ontimeupdate = function () {
+                    if (audio.duration) {
+                        const progressPercent = Math.floor(audio.currentTime / audio.duration * 100)
+                        progress.value = progressPercent;
+                    }
+                }
+
+                // xu ly khi tua song
+                progress.onchange = function (e) {
+                    const seekTime = e.target.value * audio.duration / 100
+                    audio.currentTime = seekTime
+                }
+
+                // khi next bai
+                nextBtn.onclick = function () {
+                    if (_this.isRandom) {
+                        _this.playRandomSong();
+                    }
+                    else {
+                        _this.nextSong();
+                    }
+                    audio.play();
+                    cd_thumbAimate.play();
+                    _this.render();
+                    _this.scrollToActiveSong();
+                }
+
+                // khi pre 
+                preBtn.onclick = function () {
+                    if (_this.isRandom) {
+                        _this.playRandomSong();
+                    }
+                    else {
+                        _this.preSong();
+                    }
+                    audio.play();
+                    cd_thumbAimate.play();
+                    _this.render();
+                }
+
+
+                // khi bat tat random
+                randomBtn.onclick = function (e) {
+                    _this.isRandom = !_this.isRandom;
+                    randomBtn.classList.toggle('active', _this.isRandom);
+                }
+
+
+                // xu ly bat tat lap lai mot song
+                repeatBtn.onclick = function () {
+                    _this.isRepeat = !_this.isRepeat;
+                    repeatBtn.classList.toggle('active', _this.isRepeat);
+                }
+
+                // xu ly next song khi audio ended va lap lai mot song
+                audio.onended = function () {
+                    if (_this.isRepeat) {
+                        audio.play();
+                    }
+                    else {
+                        nextBtn.click()
+                    }
+                }
+
+
+                //lang nghe hanh vi click vao playlist
+                playList.onclick = function (e) {
+                    const songNode = e.target.closest('.song:not(._active)')
+                    // xu ly khi click vao song
+                    if (songNode || e.target.closest('.emot')) {
+                        // xu ly click vao song
+                        if (songNode) {
+                            _this.currentIndex = Number(songNode.dataset.index)
+                            _this.loadCurrentSong();
+                            audio.play();
+                            _this.render();
+                            cd_thumbAimate.play()
+                            playBtn.click();
+                        }
+
+                        // xu ly khi click vao song option
+
+                        if (e.target.closest('.emot')) {
+                            
+                        }
+                    }
+                }
+            },
+            scrollToActiveSong: function () {
+                setTimeout(() => {
+                    $('.song._active').scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'nearest',
+                    })
+                }, 300)
+            },
+            loadCurrentSong: function () {
+                heading.textContent = this.currentSong.name
+                cdThumb.style.backgroundImage = `url('${this.currentSong.image}')`
+                audio.src = this.currentSong.path
+            },
+            nextSong: function () {
+                this.currentIndex++
+                if (this.currentIndex >= this.songs.length) {
+                    this.currentIndex = 0
+
+                }
+                this.loadCurrentSong();
+
+            },
+            preSong: function () {
+                this.currentIndex--
+                if (this.currentIndex == -1) {
+                    this.currentIndex = this.songs.length - 1;
+                }
+                this.loadCurrentSong();
+            },
+            playRandomSong: function () {
+                let newIndex
+                do {
+                    newIndex = Math.floor(Math.random() * this.songs.length);
+                } while (newIndex === this.currentIndex)
+                this.currentIndex = newIndex
+                this.loadCurrentSong();
+            },
+            start: function () {
+                //Ding nghia cac thuoc tinh cho Object
+                this.defineProperties()
+
+                // lang nghe va xu ly cac su kien
+                this.handleEvents();
+
+                //Render songs
+                this.render();
+
+                // tai thong tin bai hat dau tien khi chay ung dung
+                this.loadCurrentSong();
+
+            }
+        }
+        app.start();
+
+    </script>
+<!-- Code injected by live-server -->
+<script>
+	// <![CDATA[  <-- For SVG support
+	if ('WebSocket' in window) {
+		(function () {
+			function refreshCSS() {
+				var sheets = [].slice.call(document.getElementsByTagName("link"));
+				var head = document.getElementsByTagName("head")[0];
+				for (var i = 0; i < sheets.length; ++i) {
+					var elem = sheets[i];
+					var parent = elem.parentElement || head;
+					parent.removeChild(elem);
+					var rel = elem.rel;
+					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+					}
+					parent.appendChild(elem);
+				}
+			}
+			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+			var address = protocol + window.location.host + window.location.pathname + '/ws';
+			var socket = new WebSocket(address);
+			socket.onmessage = function (msg) {
+				if (msg.data == 'reload') window.location.reload();
+				else if (msg.data == 'refreshcss') refreshCSS();
+			};
+			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+				console.log('Live reload enabled.');
+				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+			}
+		})();
+	}
+	else {
+		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+	}
+	// ]]>
+</script>
+</body>
+
+</html>
