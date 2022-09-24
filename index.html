@@ -128,6 +128,9 @@
 
         const $ = document.querySelector.bind(document);
         const $$ = document.querySelectorAll.bind(document);
+
+        const PLAYER_STORAGE_Key = 'Music Player'
+
         const heading = $('header h3');
         const cdThumb = $('.cd_thumb')
         const audio = $('#audio')
@@ -146,6 +149,7 @@
             currentIndex: 0,
             isRandom: false,
             isRepeat: false,
+            config: JSON.parse(localStorage.getItem(PLAYER_STORAGE_Key)) || {},
             songs: [
                 {
                     name: 'Đứa nào làm em buồn',
@@ -197,6 +201,10 @@
                 }
                 
             ],
+            setConfig: function(key,value){
+                this.config[key] = value;
+                localStorage.setItem(PLAYER_STORAGE_Key,JSON.stringify(this.config))
+            },
             //1.Render songs
             render: function () {
                 const htmls = this.songs.map((song, index) => {
@@ -312,6 +320,7 @@
                 // khi bat tat random
                 randomBtn.onclick = function (e) {
                     _this.isRandom = !_this.isRandom;
+                    _this.setConfig('isRandom',_this.isRandom)
                     randomBtn.classList.toggle('active', _this.isRandom);
                 }
 
@@ -369,6 +378,10 @@
                 cdThumb.style.backgroundImage = `url('${this.currentSong.image}')`
                 audio.src = this.currentSong.path
             },
+            loadConfig: function(){
+                this.isRandom = this.config.isRandom
+                this.isRepeat = this.config.isRepeat
+            },
             nextSong: function () {
                 this.currentIndex++
                 if (this.currentIndex >= this.songs.length) {
@@ -394,6 +407,9 @@
                 this.loadCurrentSong();
             },
             start: function () {
+                // gan cau hinh tu config
+                this.loadConfig()
+
                 //Ding nghia cac thuoc tinh cho Object
                 this.defineProperties()
 
